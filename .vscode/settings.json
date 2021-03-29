@@ -1,0 +1,11 @@
+{
+  "editor.formatOnSave": true, //当保存时，就是format，format跟据.prettierrc.js的规范来
+  "editor.formatOnPaste": false, //当粘贴时，就是format，format跟据.prettierrc.js的规范来
+  "editor.formatOnType": false, //当输入时，就是format，format跟据.prettierrc.js的规范来
+  "eslint.run": "onSave", //当保存时，eslint启动当前文件的检验
+  "editor.codeActionsOnSave": {
+    //当保存时,eslint自动fix
+    "source.fixAll.eslint": true
+  },
+  "prettier.eslintIntegration": true //让prettier使用eslint的代码格式进行校验
+}

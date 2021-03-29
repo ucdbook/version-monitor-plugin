@@ -1,0 +1,16 @@
+# http://editorconfig.org
+root = true
+
+[*]
+indent_style = space  # 缩进方式
+indent_size = 2       # 缩进的空格数
+end_of_line = lf      # 结尾换行符
+charset = utf-8       # 设置字符集
+trim_trailing_whitespace = true # 删除一行中的前后空格
+insert_final_newline = true # 在文件结尾插入新行
+
+[*.md]
+trim_trailing_whitespace = false
+
+[Makefile]
+indent_style = tab

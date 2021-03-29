@@ -11,6 +11,13 @@
  const versionString = `${currentData.getFullYear()}-${currentData.getMonth() + 1}-${currentData.getDate()} ${currentData.getHours()}:${currentData.getMinutes()}:${currentData.getSeconds()}`
  const versionFileContent = JSON.stringify({'versions': versionString});
  let versionMonitorJsContent = fs.readFileSync(path.join(__dirname, './VersionMonitor.js'), 'utf-8');
+ const HtmlWebpackPlugin = require('html-webpack-plugin');
+ const jsName = 'versionMonitor.js';
+
+const addAllAssetsToCompilation = async (compilation, htmlPluginData) => {
+  htmlPluginData.assets.js.unshift(`/${jsName}`);
+  return htmlPluginData;
+};
 
  class VersionMonitorPlugin {
    constructor(a) {
@@ -20,7 +27,7 @@
    apply(compiler) {
      const outputPath = compiler.options.output.path;
      // emit 是异步 hook，使用 tapAsync 触及它，还可以使用 tapPromise/tap(同步)
-     compiler.hooks.emit.tapAsync('FileListPlugin', (compilation, callback) => {
+     compiler.hooks.emit.tapAsync('VersionMonitorPlugin', (compilation, callback) => {
        // 在生成文件中，创建一个头部字符串：
        var filelist = 'In this build:\n\n';
 
@@ -43,7 +50,7 @@
       // ：
       versionMonitorJsContent = versionMonitorJsContent.replace('<% versionString %>', versionString);
       versionMonitorJsContent = versionMonitorJsContent.replace('<% timeoutValue %>', this.options.speed);
-      compilation.assets['versionMonitor.js'] = {
+      compilation.assets[jsName] = {
         source: function() {
           return versionMonitorJsContent;
         },
@@ -52,20 +59,29 @@
         }
       };
 
+
+
+      let beforeGenerationHook;
+      //let alterAssetTagsHook;
+
+      if (HtmlWebpackPlugin.version >= 4) {
+        const hooks = HtmlWebpackPlugin.getHooks(compilation);
+
+        beforeGenerationHook = hooks.beforeAssetTagGeneration;
+        //alterAssetTagsHook = hooks.alterAssetTags;
+      } else {
+        const { hooks } = compilation;
+
+        beforeGenerationHook = hooks.htmlWebpackPluginBeforeHtmlGeneration;
+        //alterAssetTagsHook = hooks.htmlWebpackPluginAlterAssetTags;
+
+        beforeGenerationHook.tapPromise('VersionMonitorPlugin', htmlPluginData => addAllAssetsToCompilation(compilation, htmlPluginData));
+      }
+
       callback();
      });
 
-    //  compiler.hooks.done.tap('HtmlWebpackPlugin', (
-    //     stats /* 在 hook 被触及时，会将 stats 作为参数传入。 */
-    //   ) => {
-    //     var aa = fs.readFileSync(path.join(outputPath, 'index.html'), 'utf-8');
-    //     const html = '<html><head></head><body>dsfdsfd</body></html>';
-    //     console.log(11111112, path.join(outputPath, 'index.html'), aa);
-    //     fs.writeFileSync(path.join(outputPath, 'index.html'), html, { encoding: 'utf-8' });
-    //     console.log('HtmlWebpackPlugin done!');
 
-    //     //applyPluginsAsyncWaterfall('html-webpack-plugin-before-html-processing', true, pluginArgs);
-    //   });
    }
  }
  module.exports = VersionMonitorPlugin;

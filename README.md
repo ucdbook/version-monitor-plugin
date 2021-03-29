@@ -9,10 +9,12 @@ webpack plugin
 **plugin逻辑：**
 1. 生成version.json文件到发布目录（当前日期）
 2. 生成versionMonitor.js文件到发布目录
+3. 把versionMonitor.js通过HtmlWebpackPlugin插入html中
 
 **versionMonitor.js逻辑：**
 1. 监听系统在浏器中资源加载失败，这时去ajax请求version.json中的版本号，进行对比，不一至测提示“系统版本更新”，提示框不可关闭，只有“刷新”按钮；
 2. 根据设置的时间定时ajax请求version.json中的版本号，进行对比，不一至测提示“系统版本更新”，操作按钮有：“知道了，我会稍后手动刷新”、“刷新”
+
 
 **使用：**
 ```

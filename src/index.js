@@ -10,19 +10,19 @@
  const currentData = new Date();
  const versionString = `${currentData.getFullYear()}-${currentData.getMonth() + 1}-${currentData.getDate()} ${currentData.getHours()}:${currentData.getMinutes()}:${currentData.getSeconds()}`
  const versionFileContent = JSON.stringify({'versions': versionString});
- let versionMonitorJsContent = fs.readFileSync(path.join(__dirname, './VersionMonitor.js'), 'utf-8');
+ let versionMonitorJsContent = fs.readFileSync(path.join(__dirname, './VersionMonitorMin.js'), 'utf-8');
  const HtmlWebpackPlugin = require('html-webpack-plugin');
  const jsName = 'versionMonitor.js';
 
 const addAllAssetsToCompilation = async (compilation, htmlPluginData) => {
-  htmlPluginData.assets.js.unshift(`/${jsName}`);
+  htmlPluginData.assets.js.unshift(`./${jsName}`);
   return htmlPluginData;
 };
 
  class VersionMonitorPlugin {
-   constructor(a) {
+   constructor(options) {
      this.options = {};
-     this.options.speed = 60000;
+     this.options.speed = options.speed || 60000;
    }
    apply(compiler) {
      const outputPath = compiler.options.output.path;

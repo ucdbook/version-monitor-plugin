@@ -1,18 +1,24 @@
+/**
+ * 系统版本监视器
+ * @author yanrong.tian
+ * @date 2021/3/06 14:22:00
+ */
+
 var $alert = document.createElement('div');
 var isAlerting = false;
 var $closeIconPre, $closeButtonPre;
 var closeFn = function() {
   $alert.innerHTML = '';
   isAlerting = false;
-}
+};
 
 var VersionMonitor = function() {
   this.version = '<% versionString %>';
   this.loadSourceError = false;
-  this.versionFileUrl = '/version.json';
+  this.versionFileUrl = './version.json';
   this.timeoutValue = '<% timeoutValue %>';
   this.init();
-}
+};
 VersionMonitor.prototype = {
   init: function() {
     this.addErrorEventListener();
@@ -34,7 +40,7 @@ VersionMonitor.prototype = {
             sourceUrl = target.src;
           }
           _this.loadSourceError = true;
-          _this.fetchNewVersion(_this.alertReload, 'timeout');
+          _this.fetchNewVersion(_this.alertReload, 'error');
         }
       }
     },true);
@@ -60,7 +66,7 @@ VersionMonitor.prototype = {
       }
     }
 
-    xmlhttp.open("GET",this.versionFileUrl,true);//true代表支持异步执行，false为否
+    xmlhttp.open("GET",`${this.versionFileUrl}?_t=${+new Date()}`,true);//true代表支持异步执行，false为否
 
     xmlhttp.send();
   },
@@ -68,7 +74,7 @@ VersionMonitor.prototype = {
   timeoutVersionListener: function() {
     var _this = this;
     setTimeout(function() {
-      _this.fetchNewVersion(this.alertReload, 'timeout');
+      _this.fetchNewVersion(_this.alertReload, 'timeout');
       _this.timeoutVersionListener();
     }, this.timeoutValue)
   },
@@ -137,5 +143,5 @@ VersionMonitor.prototype = {
     document.body.appendChild($alert);
   }
 
-}
+};
 new VersionMonitor();

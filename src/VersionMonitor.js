@@ -95,7 +95,7 @@ VersionMonitor.prototype = {
               '<div class="ant-modal-title" id="rcDialogTitle1">系统版本更新</div>'+
             '</div>'+
           '<div class="ant-modal-body">发现系统有新版本发布，请刷新浏览器，更新系统!</div>'+
-          '<div class="ant-modal-footer" style="border:none;">'+
+          '<div class="ant-modal-footer" style="border:none;padding: 5px 24px 20px;">'+
             '<span class="_tx_close_button" style="margin-right: 10px"></span>'+
             '<span class="_tx_ok_button"></span>'+
           '</div>'+

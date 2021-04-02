@@ -3,6 +3,7 @@
 webpack plugin
 
 **用于场景：**
+
 当系统是以按需加载构建时，发布新版本，单页面应用的系统在切换模块时，还请求的旧的js路径，因新版本的发布，旧的js文件名已不存在，这时需要提醒用户刷新浏览器。
 
 
@@ -17,7 +18,8 @@ webpack plugin
 
 
 **使用：**
-```
+
+``` js
 // webpack.config.js
 
 const VersionMonitorPlugin = require('version-monitor-plugin');
@@ -30,4 +32,5 @@ module.exports = {
     ...
   ]
 }
+
 ```
